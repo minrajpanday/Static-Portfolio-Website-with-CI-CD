@@ -1,0 +1,35 @@
+# Workflow for automatic deployment to GitHub Pages
+
+name: Deploy Static Site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Only run when code is pushed to the 'main' branch
+
+jobs:
+  deployment:
+    # Use the latest Ubuntu runner environment
+    runs-on: ubuntu-latest
+    
+    # Permissions are necessary for the deployment action to work
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    steps:
+      - name: ⬇️ Checkout repository
+        uses: actions/checkout@v4 # Action to clone the repository content
+
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3 
+        with:
+          # Automatically uses the GITHUB_TOKEN for authentication
+          github_token: ${{ secrets.GITHUB_TOKEN }} 
+          # Specifies the branch where the static files will be pushed (gh-pages)
+          publish_branch: gh-pages 
+          # Specifies the directory containing the files to deploy (the root of the repo)
+          publish_dir: ./ 
+          # Keep the existing CNAME file if you were using a custom domain
+          keep_files: true
